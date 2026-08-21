@@ -1,0 +1,254 @@
+\documentclass{resume}
+
+\usepackage[left=0.4in,top=0.4in,right=0.4in,bottom=0.4in]{geometry}
+
+% --- Sort newest first by full date (YYYY-MM-DD), then author, then title
+\DeclareSortingTemplate{dateydnt}{%
+  \sort{%
+    \field{presort}%
+  }%
+  \sort[final]{%
+    \field{sortkey}%
+  }%
+  \sort[direction=descending]{%
+    \field{sortyear}%
+    \field{year}%
+    \literal{9999}%
+  }%
+  \sort[direction=descending]{%
+    \field{month}%
+  }%
+  \sort[direction=descending]{%
+    \field{day}%
+  }%
+  \sort{%
+    \field{sortname}%
+    \field{author}%
+    \field{editor}%
+    \field{translator}%
+    \field{sorttitle}%
+    \field{title}%
+  }%
+  \sort{%
+    \field{sorttitle}%
+    \field{title}%
+  }%
+}
+
+% Use date if present (for sorting/labeling); fallback to year
+\DeclareLabeldate{%
+  \field{date}
+  \field{year}
+}
+
+% --- Force straight single quotes around ARTICLE titles
+% IMPORTANT: do NOT type any quotes into the .bib title field itself.
+\DeclareFieldFormat[article]{title}{`#1'}
+
+% --- DOI field: blindly treat contents as a clickable URL
+\DeclareFieldFormat{doi}{%
+  \iffieldundef{doi}
+    {}
+    {\addspace\href{#1}{\nolinkurl{DOI}}}%
+}
+
+% --- Remove unwanted fields
+\AtEveryBibitem{%
+  \clearfield{month}%
+  \clearfield{day}%
+  \clearfield{urldate}%
+  \clearlist{language}%
+  \clearfield{issn}%
+  \clearfield{isbn}%
+}
+
+\renewbibmacro*{bbx:dashcheck}[2]{#2}
+\AtBeginBibliography{\raggedright}
+\setlength{\bibhang}{0pt}
+\setlength{\bibitemsep}{0.25\baselineskip}
+
+% --- Custom driver for journal articles
+% This guarantees you get: '...?'.
+
+\DeclareBibliographyDriver{article}{%
+  \printnames{author}%
+  \space (\printfield{year})%
+  \space
+  \printtext{\printfield{title}}%
+  \printtext{.}\space
+  \printfield{journaltitle}%
+  \adddot\space
+  \printfield{doi}%
+  \adddot\space
+  \printfield{note}%
+  \finentry
+}
+
+\renewbibmacro*{date+extradate}{%
+  \printlabeldateextra
+}
+
+\addbibresource{../bib/publications.bib}
+
+% --- Name format: Surname, N.
+\DeclareNameAlias{author}{family-given}
+\DeclareNameAlias{editor}{family-given}
+\DeclareNameFormat{family-given}{%
+  \usebibmacro{name:family-given}%
+    {\namepartfamily}%
+    {\namepartgiveni}%
+    {\namepartprefix}%
+    {\namepartsuffix}%
+  \usebibmacro{name:andothers}%
+}
+
+
+\newcommand{\tab}[1]{\hspace{.2667\textwidth}\rlap{#1}} 
+\newcommand{\itab}[1]{\hspace{0em}\rlap{#1}}
+\name{Nicholas Sweeney} % Your name
+
+
+\address{University of Manchester, United Kingdom} 
+\address{\href{mailto:general@npsweeney.co.uk}{Email} \\ 
+\href{https://www.npsweeney.co.uk}{Website}}
+
+\begin{document}
+
+
+\begin{rSection}{Current Employment}
+{\bf Sir Terry Leahy Fellow of Urban and Regional Economics} \hfill {2025 -- }\\
+Three-year appointment at the Alliance Manchester Business School, University of Manchester
+\end{rSection}
+
+\begin{rSection}{Academic publications}
+\begin{refsection}[../bib/publications.bib]
+\nocite{*}
+\printbibliography[heading=none]
+\end{refsection}
+\end{rSection}
+
+
+\begin{rSection}{Policy publications}
+Ioramashvili, C. \& Sweeney, N. (2026) \textit{Ticket to Impact: Estimating the impact of transport connectivity on collaborative research projects}. Oxford, UK: Innovation and Research Caucus. \href{https://ircaucus.ac.uk/publications/ticket-to-impact-estimating-the-impact-of-public-transport-infrastructure-for-research-productivity/}{\nolinkurl{Report}}.
+\end{rSection}
+
+
+\begin{rSection}{Education}
+
+{\bf Land Economy, PhD}, St Catharine's College, University of Cambridge \hfill {2022 -- 2026}\\
+\textit{Started 1 October 2022; submitted 26 September 2025; graduated 22 May 2026} \\
+\vspace{-1.5em}
+\begin{itemize}
+  \itemsep -3pt {} 
+  \item \textbf{Thesis \& Funding:} `Devolution and Space in England: Empirical Essays on Economic Growth, Democratic Engagement and Health'; fully funded by the ESRC Doctoral Training Partnership; \href{https://www.repository.cam.ac.uk/items/b8a057d6-9a83-423b-ae1c-a56c1e8a202f}{\nolinkurl{DOI}}.
+\end{itemize}
+
+{\bf Land Economy by Research, MPhil}, Darwin College, University of Cambridge \hfill {2021 -- 2022}\\
+\textit{Distinction} (75\%)\\
+\vspace{-1.5em}
+\begin{itemize}
+  \itemsep -3pt {} 
+  \item \textbf{Awards \& Achievements:} £12,000 Cambridge Trust (Grace Goh Studentship); 87\% in Research Methods
+\end{itemize}
+
+{\bf Land Economy, BA}, Jesus College, University of Cambridge \hfill {2018 -- 2021}\\
+\textit{Double First-class} (73.4\%) \\
+\vspace{-1.5em}
+\begin{itemize}
+  \itemsep -3pt {} 
+  \item \textbf{Awards \& Achievements:} Most marks in cohort across all three years; prizes for best final-year dissertation (82\%), best overall second-year performance (71.6\%), best overall  (71\%) and Economics, first-year performance
+\end{itemize}
+
+\end{rSection}
+
+\begin{rSection}{ACADEMIC EXPERIENCE}
+
+\textbf{Sir Terry Leahy Fellow of Urban and Regional Economics} \hfill 2025 --
+\vspace{-0.5em}
+ \begin{itemize}
+  \itemsep -3pt {} 
+   \item Research spanning multiple themes surrounding subnational inequalities and growth, with a particular focus on modelling innovation, mobility and political patterns of discontent using big data
+ \item Winner of Best Presentation at Regional Science Association International (British and Irish Section) Early Career Colloquium 2026
+   \item Data Lead on agreements with TravelTime API, The Elections Centre, Rail Data Marketplace
+ \end{itemize}
+
+\textbf{University of Cambridge Interviewer} \hfill  \hfill 2022 -- \textit{Trinity Hall}  \& 2024 -- \textit{Sidney Sussex}
+\vspace{-0.5em}
+ \begin{itemize}
+    \itemsep -3pt {} 
+     \item Entrusted to be one of four interviewers for candidates for undergraduate Land Economy applications 
+     \item Consulted on final selection of candidates, justifying my reasoning based on objective criteria
+ \end{itemize}
+
+\textbf{University of Cambridge Supervisor} \hfill Autumn 2022 \\
+Department of Land Economy \hfill \textit{Cambridge, UK}
+\vspace{-0.5em}
+ \begin{itemize}
+    \itemsep -3pt {} 
+     \item Supervised 60 second year undergraduates on `Paper 11: Land and Urban Economics', marking essays, giving feedback and clarifying technical and theoretical problems in small group formats
+     \item Covered the topics of agglomeration, reasons for co-location of highly skilled couples, retail accessibility as a determinant of place attractiveness and whether big cities were `bad places to live'
+ \end{itemize}
+
+\end{rSection}
+
+\begin{rSection}{OTHER ACADEMIC ACTIVITIES}
+-- \textbf{Dissemination invitations} (theme, date; earliest first): University of Cambridge (innovation geography, Dec 2025); The Productivity Institute (innovation geography, Jan 2026); London School of Economics (innovation geography, Feb 2026); Ministry of Housing, Communities and Local Government (devolution, Feb 2026); HM Treasury (devolution, Mar 2026); RSAI-BIS Conference Belfast (big data mobility, invited early career researcher, May 2026)
+
+-- \textbf{Journal referee}: Regional Studies
+
+-- \textbf{Advisory positions}: Scientific Advisory Board member for the Biologics Regional Innovation and Technology Ecosystem (\href{https://briteprogramme.co.uk/}{BRITE}) UKRI project 
+
+\end{rSection}
+
+\begin{rSection}{POLICY EXPERIENCE}
+
+\textbf{Data Science Intern} \hfill September 2023 -- March 2024 \\
+Organisation for Economic Co-operation and Development \hfill \textit{Paris, France}
+\vspace{-0.5em}
+ \begin{itemize}
+    \itemsep -3pt {} 
+     \item Recruited to employ Natural Language Processing techniques to explore the potential for big data (full text job listings) to illustrate how the digital and green (`twin') transition is impacting labour markets
+      \item During my internship, I also focused on analysing sector-specific datasets, particularly in mining, using R and Python to present findings for the LESI Division
+ \end{itemize}
+
+\textbf{Researcher} \hfill \\
+\vspace{-1.75em}
+ \begin{itemize}
+    \itemsep -3pt {} 
+     \item \textbf{MillNET\_i} \hfill Summer 2021 -- \textit{Virtual}\\
+     Analysed household income and diet panel data in The Gambia and Ethiopia during COVID-19. \href{https://www.globalfood.cam.ac.uk/keyprogs/millneti}{Project}.
+     \item \textbf{ASEAN Development Outlook Report} \hfill Summer 2020 -- \textit{Virtual}\\
+     Contributed notes and proofreading on identity, environment, livelihoods, welfare and health. \href{https://www.asean.org/wp-content/uploads/2021/07/ASEAN-Development-Outlook-ADO_FINAL.pdf}{\nolinkurl{DOI}}.
+ \end{itemize}
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+% TECHINICAL STRENGTHS	
+%----------------------------------------------------------------------------------------
+\begin{rSection}{SKILLS}
+
+\begin{tabular}{ @{} >{\bfseries}l @{\hspace{6ex}} l }
+Data access & Office of National Statistics Accredited Researcher  (no. 36517, exp. Nov. 2026) \\
+Software &  Proficient in \textbf{Python}, \textbf{R},  \textbf{LaTeX}, \textbf{STATA}, intermediate in \textbf{QGIS}
+\\
+Communication & Intermediate French language\\
+\end{tabular}\\
+\end{rSection}
+
+\begin{rSection}{Other} 
+ 
+ 
+ \begin{tabular}{ @{} >{\bfseries}l @{\hspace{6ex}} l }
+Societies and interests & University of Manchester Humanities Fellows Committee, Hawks' Club President \&  \\
+ & Committee, Cambridge University Association Football Club Secretary 
+\\
+Date of birth & 19 July 2000 \\
+\end{tabular}\\
+\end{rSection}
+
+\smallskip
+\begin{center}
+{\footnotesize Last updated: \today}
+\end{center}
+
+\end{document}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "yourname2026example",
+    "type": "article",
+    "title": "An Example Academic Publication",
+    "authors": [
+      "Name, Your"
+    ],
+    "venue": "Example Journal",
+    "year": "2026",
+    "date": "2026-01-01",
+    "doi": "https://doi.org/10.0000/example-doi",
+    "outlet_url": "https://example.org",
+    "note": "",
+    "keywords": [
+      "First theme",
+      "Second theme"
+    ],
+    "webnote": "",
+    "category": "Academic"
+  },
+  {
+    "id": "yourname2026policy",
+    "type": "report",
+    "title": "An Example Policy Publication",
+    "authors": [
+      "Name, Your"
+    ],
+    "venue": "Example Institute",
+    "year": "2026",
+    "date": "2026-01-01",
+    "doi": "",
+    "outlet_url": "https://example.org",
+    "note": "",
+    "keywords": [
+      "Policy",
+      "Evidence"
+    ],
+    "webnote": "",
+    "category": "Policy"
+  }
+]

@@ -1,0 +1,8 @@
+---
+title: "Curriculum Vitae"
+format:
+  html:
+    toc: false
+---
+
+Add your CV PDF as `site/assets/cv.pdf`, then replace this text with an embedded PDF viewer or a download link.

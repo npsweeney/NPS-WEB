@@ -1,0 +1,42 @@
+---
+title: "Your Name"
+format:
+  html:
+    toc: false
+---
+
+## Institutions · Innovation · Inequalities
+
+### Bio
+
+Hello, welcome to my personal website. I am a researcher in [your field]{.placeholder} at [your institution]{.placeholder}.
+
+Add a short, first-person account of your research, its motivation, and the questions that guide your work.
+
+::: {.columns .research-methods-columns}
+
+::: {.column .research-interests-column width="50%"}
+
+### Research interests
+
+- First research interest
+- Second research interest
+- Third research interest
+
+:::
+
+::: {.column .methods-column width="50%"}
+
+### Research methods
+
+- First method
+- Second method
+- Third method
+
+:::
+
+:::
+
+### Educational history
+
+Add your education and career history here.

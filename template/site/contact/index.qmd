@@ -1,0 +1,32 @@
+---
+title: "Contact"
+format:
+  html:
+    toc: false
+---
+
+::: {.columns}
+
+::: {.column .contact-emails width="50%"}
+
+## Emails
+
+- **Academic**
+  [name@university.edu](mailto:name@university.edu)
+
+- **General enquiries**
+  [name@example.org](mailto:name@example.org)
+
+:::
+
+::: {.column .contact-profiles width="50%"}
+
+## Profiles
+
+- [Google Scholar](https://scholar.google.com/){target="_blank" rel="noopener"}
+- [ORCID](https://orcid.org/){target="_blank" rel="noopener"}
+- [GitHub](https://github.com/){target="_blank" rel="noopener"}
+
+:::
+
+:::

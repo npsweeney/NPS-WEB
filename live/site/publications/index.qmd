@@ -1,0 +1,454 @@
+---
+title: "Publications"
+format:
+  html:
+    toc: false
+---
+
+<div id="pubs"></div>
+
+<script>
+(async function () {
+  const container = document.getElementById("pubs");
+  const url = "../publications.json";
+
+  // ---------------- helpers ----------------
+  function escapeText(s) { return String(s ?? ""); }
+
+  function normDate(d) {
+    const x = String(d ?? "").trim();
+    return x.length ? x : "0000-00-00";
+  }
+
+  function fmtDate(d) {
+    const x = String(d ?? "").trim();
+    if (!x) return "";
+    const dt = new Date(x);
+    if (isNaN(dt.getTime())) return x;
+    return dt.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  }
+
+  function compare(a, b, key, dir) {
+    let av = a[key] ?? "";
+    let bv = b[key] ?? "";
+    if (key === "date") {
+      av = normDate(av);
+      bv = normDate(bv);
+    } else {
+      av = String(av).toLowerCase();
+      bv = String(bv).toLowerCase();
+    }
+    const cmp = av < bv ? -1 : av > bv ? 1 : 0;
+    return dir === "asc" ? cmp : -cmp;
+  }
+
+  function normaliseDoiUrl(raw) {
+    const s = String(raw ?? "").trim();
+    if (!s) return "";
+    if (s.startsWith("http://") || s.startsWith("https://")) return s;
+    // allow bare DOI like "10.1234/abcd"
+    return `https://doi.org/${s}`;
+  }
+
+  // Search across all visible fields + DOI URL
+  function matchesQuery(p, q) {
+    if (!q) return true;
+    const hay = [
+      p.date, p.title, p.authors, p.category, p.journal, p.keywords, p.doi_url
+    ].join(" ").toLowerCase();
+    return hay.includes(q);
+  }
+
+  try {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error(`Could not load ${url} (${res.status})`);
+    const data = await res.json();
+
+    const pubsAll = (data || []).map(d => {
+      const kws = Array.isArray(d.keywords) ? d.keywords : [];
+      const authorsArr = Array.isArray(d.authors) ? d.authors : [];
+      const authorNames = authorsArr.map(author => {
+        const parts = author.split(",").map(part => part.trim()).filter(Boolean);
+        return parts.length === 2 ? `${parts[1]} ${parts[0]}` : author.trim();
+      });
+      return ({
+        date: d.date || d.published || d.publication_date || "",
+        title: d.title || "",
+        authors: authorNames.join(", "),
+        authorNames,
+        category: d.category || "Academic",
+        journal: d.venue || d.journal || "",
+        outlet_url: d.outlet_url || "",
+        keywords: kws.join(", "),
+        webnote: d.webnote || "",
+        doi_url: normaliseDoiUrl(d.doi_url || d.doi || "")
+      });
+    });
+
+    if (!pubsAll.length) {
+      container.textContent = "No publications found.";
+      return;
+    }
+
+    let pubsView = pubsAll.slice();
+    let sortState = { key: "date", dir: "desc" };
+    let query = "";
+
+    // ---------------- UI: search + meta ----------------
+    const topbar = document.createElement("div");
+    topbar.className = "pubs-topbar";
+
+    const search = document.createElement("input");
+    search.className = "pubs-search";
+    search.type = "search";
+    search.placeholder = "Search title, authors, type, outlet or keywords…";
+    search.autocomplete = "off";
+    search.spellcheck = false;
+
+    const meta = document.createElement("div");
+    meta.className = "pubs-meta";
+    meta.textContent = "";
+
+    topbar.appendChild(search);
+    topbar.appendChild(meta);
+
+    // ---------------- Table skeleton (NO DOI column) ----------------
+    const wrap = document.createElement("div");
+    wrap.className = "pubs-table-wrap";
+
+    const table = document.createElement("table");
+    table.className = "pubs-table";
+
+    const thead = document.createElement("thead");
+    const headRow = document.createElement("tr");
+
+    function makeSortableTh(label, key) {
+      const th = document.createElement("th");
+      th.className = "pubs-th";
+      th.tabIndex = 0;
+      th.setAttribute("role", "button");
+      th.dataset.key = key;
+      th.textContent = label;
+
+      const toggle = () => {
+        if (sortState.key === key) {
+          sortState.dir = sortState.dir === "asc" ? "desc" : "asc";
+        } else {
+          sortState.key = key;
+          sortState.dir = key === "date" ? "desc" : "asc";
+        }
+        renderBody();
+        renderHeadIndicators();
+      };
+
+      th.addEventListener("click", toggle);
+      th.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggle();
+        }
+      });
+
+      return th;
+    }
+
+    const thDate     = makeSortableTh("Date", "date");
+    const thTitle    = makeSortableTh("Title", "title");
+    const thAuthors  = makeSortableTh("Author(s)", "authors");
+    const thCategory = makeSortableTh("Academic/Policy", "category");
+    const thJournal  = makeSortableTh("Outlet", "journal");
+    const thKeywords = makeSortableTh("Keywords", "keywords");
+
+    headRow.appendChild(thDate);
+    headRow.appendChild(thTitle);
+    headRow.appendChild(thAuthors);
+    headRow.appendChild(thCategory);
+    headRow.appendChild(thJournal);
+    headRow.appendChild(thKeywords);
+
+    thead.appendChild(headRow);
+
+    const tbody = document.createElement("tbody");
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+
+    container.innerHTML = "";
+    container.appendChild(topbar);
+    container.appendChild(wrap);
+
+    function renderHeadIndicators() {
+      const map = new Map([
+        [thDate, "Date"],
+        [thTitle, "Title"],
+        [thAuthors, "Author(s)"],
+        [thCategory, "Academic/Policy"],
+        [thJournal, "Outlet"],
+        [thKeywords, "Keywords"],
+      ]);
+
+      for (const [th, base] of map.entries()) {
+        const key = th.dataset.key;
+        const active = sortState.key === key;
+        th.classList.toggle("is-active", active);
+        th.textContent = base + (active ? (sortState.dir === "asc" ? " ▲" : " ▼") : "");
+      }
+    }
+
+    function applyFilter() {
+      const q = query.trim().toLowerCase();
+      pubsView = pubsAll.filter(p => matchesQuery(p, q));
+      meta.textContent = `${pubsView.length} item${pubsView.length === 1 ? "" : "s"}`;
+    }
+
+    function renderBody() {
+      applyFilter();
+      pubsView.sort((a, b) => compare(a, b, sortState.key, sortState.dir));
+      tbody.innerHTML = "";
+
+      if (!pubsView.length) {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 7;
+        td.className = "pubs-empty";
+        td.textContent = "No matches.";
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+
+      for (const p of pubsView) {
+        const tr = document.createElement("tr");
+
+        // Date
+        const tdDate = document.createElement("td");
+        tdDate.className = "pubs-date";
+        tdDate.dataset.label = "Date";
+        tdDate.textContent = fmtDate(p.date);
+
+        // Title — title becomes DOI link if present
+        const tdTitle = document.createElement("td");
+        tdTitle.className = "pubs-title";
+        tdTitle.dataset.label = "Title";
+
+        const doi = String(p.doi_url || "").trim();
+
+        if (doi) {
+          const a = document.createElement("a");
+          a.href = doi;
+          a.target = "_blank";
+          a.rel = "noopener";
+          a.className = "pubs-title-text pubs-title-link";
+          a.textContent = escapeText(p.title);
+          tdTitle.appendChild(a);
+        } else {
+          const span = document.createElement("span");
+          span.className = "pubs-title-text";
+          span.textContent = escapeText(p.title);
+          tdTitle.appendChild(span);
+        }
+
+        // Authors
+        const tdAuthors = document.createElement("td");
+        tdAuthors.className = "pubs-authors";
+        tdAuthors.dataset.label = "Author(s)";
+        const authorWrap = document.createElement("div");
+        authorWrap.className = "pubs-chips";
+        for (const author of p.authorNames) {
+          const chip = document.createElement("span");
+          chip.className = "pubs-chip";
+          chip.textContent = author;
+          authorWrap.appendChild(chip);
+        }
+        tdAuthors.appendChild(authorWrap);
+
+        // Academic/policy type
+        const tdCategory = document.createElement("td");
+        tdCategory.className = "pubs-category";
+        tdCategory.dataset.label = "Academic/Policy";
+        tdCategory.textContent = escapeText(p.category);
+
+        // Outlet
+        const tdJournal = document.createElement("td");
+        tdJournal.className = "pubs-journal";
+        tdJournal.dataset.label = "Outlet";
+        if (p.outlet_url) {
+          const a = document.createElement("a");
+          a.href = p.outlet_url;
+          a.target = "_blank";
+          a.rel = "noopener";
+          a.textContent = escapeText(p.journal);
+          tdJournal.appendChild(a);
+        } else {
+          tdJournal.textContent = escapeText(p.journal);
+        }
+
+        // Keywords (chips)
+        const tdKeywords = document.createElement("td");
+        tdKeywords.className = "pubs-keywords";
+        tdKeywords.dataset.label = "Keywords";
+
+        const kwList = String(p.keywords || "")
+          .split(",")
+          .map(s => s.trim())
+          .filter(Boolean);
+
+        if (kwList.length) {
+          const chipWrap = document.createElement("div");
+          chipWrap.className = "pubs-chips";
+          for (const kw of kwList) {
+            const chip = document.createElement("span");
+            chip.className = "pubs-chip";
+            chip.textContent = kw;
+            chipWrap.appendChild(chip);
+          }
+          tdKeywords.appendChild(chipWrap);
+        } else {
+          tdKeywords.textContent = "";
+        }
+
+        tr.appendChild(tdDate);
+        tr.appendChild(tdTitle);
+        tr.appendChild(tdAuthors);
+        tr.appendChild(tdCategory);
+        tr.appendChild(tdJournal);
+        tr.appendChild(tdKeywords);
+
+        tbody.appendChild(tr);
+      }
+    }
+
+    // Wire search
+    search.addEventListener("input", () => {
+      query = search.value || "";
+      renderBody();
+      renderHeadIndicators();
+    });
+
+    // Initial render
+    renderBody();
+    renderHeadIndicators();
+
+  } catch (err) {
+    container.textContent = `Error: ${err.message}`;
+  }
+})();
+</script>
+
+<style>
+/* Search bar */
+.pubs-topbar{
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: .75rem 0 1rem;
+}
+.pubs-search{
+  width: min(520px, 100%);
+  padding: .6rem .75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(255,255,255,.8);
+  outline: none;
+}
+.pubs-search:focus{
+  border-color: rgba(0,0,0,.22);
+}
+.pubs-meta{
+  opacity: .75;
+  font-size: .95em;
+  white-space: nowrap;
+}
+
+.pubs-table-wrap {
+  overflow-x: auto;
+  margin-top: .25rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pubs-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.pubs-table th, .pubs-table td {
+  box-sizing: border-box;
+  padding: .75rem .8rem;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+}
+.pubs-table thead th {
+  font-weight: 600;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.2;
+}
+
+.pubs-th { cursor: pointer; user-select: none; }
+.pubs-th.is-active { text-decoration: underline; }
+
+.pubs-date {
+  width: 1%;
+  white-space: nowrap;
+  font-size: .78em;
+}
+.pubs-table th:nth-child(1), .pubs-table td:nth-child(1) { width: 12%; }
+.pubs-table th:nth-child(2), .pubs-table td:nth-child(2) { width: 20%; }
+.pubs-table th:nth-child(3), .pubs-table td:nth-child(3) { width: 17%; }
+.pubs-table th:nth-child(4), .pubs-table td:nth-child(4) { width: 17%; }
+.pubs-table th:nth-child(4) {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+.pubs-table th:nth-child(5), .pubs-table td:nth-child(5) { width: 18%; }
+.pubs-table th:nth-child(6), .pubs-table td:nth-child(6) { width: 16%; }
+.pubs-table td {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+.pubs-title-text {
+  font-size: .88em;
+  font-weight: 600;
+}
+.pubs-authors { font-size: .92em; opacity: .8; }
+
+/* Title link styling (keeps your “premium” look) */
+.pubs-title-link{
+  text-decoration: none;
+}
+.pubs-title-link:hover{
+  text-decoration: underline;
+}
+
+/* Empty state */
+.pubs-empty{
+  padding: 1rem .8rem;
+  opacity: .8;
+}
+
+/* Keyword tags */
+.pubs-chips{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+.pubs-chip{
+  display: inline-block;
+  max-width: 100%;
+  padding: .2rem .45rem;
+  border: 1px solid rgba(42, 91, 215, .22);
+  border-radius: 6px;
+  background: rgba(42, 91, 215, .06);
+  color: rgba(22, 24, 29, .88);
+  font-size: .78em;
+  line-height: 1.25;
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+</style>

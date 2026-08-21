@@ -1,0 +1,28 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Your Name"
+  description: "Academic personal website"
+  search: false
+  navbar:
+    logo-href: /
+    left:
+      - text: "About"
+        href: /
+      - text: "Publications"
+        href: /publications
+      - text: "CV"
+        href: /cv
+      - text: "Contact"
+        href: /contact
+  page-footer:
+    center: 'Built from an <a href="https://github.com/your-username/your-repository" target="_blank" rel="noopener">academic website template</a>.'
+  favicon: favicon.svg
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: false

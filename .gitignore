@@ -1,0 +1,12 @@
+# Quarto caches
+**/.quarto/
+**/*.quarto_ipynb
+
+# Local virtual environments
+.venv/
+
+# Quarto output (don’t commit rendered site on main)
+**/_site/
+
+# macOS junk
+.DS_Store
