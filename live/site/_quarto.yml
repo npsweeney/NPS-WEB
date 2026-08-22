@@ -10,6 +10,9 @@ project:
   - favicon-nps-20260821.ico
   - favicon-nps-20260821.png
   - favicon-nps-20260821.svg
+  - favicon-nps-20260822.ico
+  - favicon-nps-20260822.png
+  - favicon-nps-20260822.svg
   output-dir: _site
 
 website:
@@ -30,7 +33,7 @@ website:
         href: /contact
   page-footer:
     center: 'Website created by Nicholas Sweeney (Template on <a href="https://github.com/npsweeney/NPS-WEB/tree/main/template" target="_blank" rel="noopener">GitHub</a>)'
-  favicon: favicon-nps-20260821.svg
+  favicon: favicon-nps-20260822.svg
 
 format:
   html:
@@ -38,6 +41,6 @@ format:
     css: styles.css
     toc: false
     header-includes: |
-      <link rel="shortcut icon" type="image/x-icon" href="/favicon-nps-20260821.ico">
-      <link rel="icon" href="/favicon-nps-20260821.ico" sizes="any">
-      <link rel="icon" type="image/png" href="/favicon-nps-20260821.png" sizes="256x256">
+      <link rel="shortcut icon" type="image/x-icon" href="/favicon-nps-20260822.ico">
+      <link rel="icon" href="/favicon-nps-20260822.ico" sizes="any">
+      <link rel="icon" type="image/png" href="/favicon-nps-20260822.png" sizes="256x256">
