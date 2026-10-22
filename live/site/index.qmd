@@ -52,7 +52,6 @@ The belief that evidence-based research can help to improve livelihoods across t
 ::: {.column .methods-column width="50%"}
 
 ### Research methods
-- Causal inference in applied microeconometrics
 - Spatial econometrics
 - Analysis using big geospatial data
 - Reproducible research in *R* and *Python*
