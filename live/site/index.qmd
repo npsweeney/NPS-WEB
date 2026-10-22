@@ -43,9 +43,9 @@ The belief that evidence-based research can help to improve livelihoods across t
 ::: {.column .research-interests-column width="50%"}
 
 ### Research interests {.research-interests}
-- Institutions, decentralisation, and multi-level governance  
-- Innovation (geography of agglomerations and networks)
-- Spatial inequalities (economic, social, political, mobility)
+- Institutions, decentralisation, and multi-level governance
+- Innovation, geography of agglomerations and networks
+- Spatial inequalities - economic, social, political, mobility
 
 :::
 
@@ -53,7 +53,8 @@ The belief that evidence-based research can help to improve livelihoods across t
 
 ### Research methods
 - Causal inference in applied microeconometrics
-- Spatial analysis using big geospatial data
+- Spatial econometrics
+- Analysis using big geospatial data
 - Reproducible research in *R* and *Python*
 
 :::
