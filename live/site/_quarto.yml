@@ -2,6 +2,7 @@ project:
   type: website
   resources:
   - assets/
+  - p7/
   - CNAME
   - publications.json
   - favicon.ico
