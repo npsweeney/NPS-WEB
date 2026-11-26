@@ -15,6 +15,7 @@ format:
   for printing/sharing.
 </p>
 
+```{=html}
 <div class="cv-box">
   <!-- Desktop/laptop: keep <object> (works well in Chrome/Firefox) -->
   <object data="../assets/cv.pdf" type="application/pdf" class="cv-embed cv-embed--object">
@@ -24,14 +25,14 @@ format:
     </p>
   </object>
 
-  <!-- Mobile (iOS Safari): use <iframe> (object is flaky/black) -->
-  <iframe
-    src="../assets/cv.pdf"
-    class="cv-embed cv-embed--iframe"
-    title="CV PDF"
-    loading="lazy"
-  ></iframe>
+  <div class="cv-pages" role="region" aria-label="CV pages">
+    <a href="../assets/cv.pdf" target="_blank" rel="noreferrer" aria-label="Open accessible CV PDF">
+      <img src="../assets/cv-page-1.jpg" alt="Curriculum vitae, page 1 of 2. Open the PDF for selectable text." width="1275" height="1650">
+      <img src="../assets/cv-page-2.jpg" alt="Curriculum vitae, page 2 of 2." width="1275" height="1650" loading="lazy">
+    </a>
+  </div>
 </div>
+```
 
 <style>
 /* Keep Quarto header spacing reasonable */
@@ -43,7 +44,7 @@ format:
 
 /* Page container */
 .cv-box{
-  width: min(900px, 92vw);
+  width: min(900px, 100%);
   margin-left: auto;
   margin-right: auto;
 }
@@ -68,15 +69,20 @@ format:
 }
 
 /* Default: show the object (desktop) */
-.cv-embed--iframe{ display: none; }
+.cv-pages{ display: none; }
 
-/* iOS/mobile: swap to iframe to avoid black/blank PDF rendering */
+/* Mobile pages scroll with the document instead of a nested PDF viewer. */
 @media (max-width: 750px){
   .cv-embed--object{ display: none; }
-  .cv-embed--iframe{ display: block; }
-  .cv-embed{
-    height: 75vh;
-    min-height: 520px;
+  .cv-box{ overflow: visible; background: transparent; }
+  .cv-pages{ display: block; }
+  .cv-pages a{ display: block; }
+  .cv-pages img{
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+    background: white;
   }
 }
 
