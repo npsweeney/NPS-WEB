@@ -3,11 +3,12 @@ import json
 import re
 from pathlib import Path
 
+BASE = Path(__file__).resolve().parent
 BIB_FILES = [
-    Path("bib/publications.bib"),
-    Path("bib/policy_publications.bib"),
+    BASE / "bib/publications.bib",
+    BASE / "bib/policy_publications.bib",
 ]
-OUT_JSON = Path("site/publications.json")
+OUT_JSON = BASE / "site/publications.json"
 
 ENTRY_RE = re.compile(r"@(\w+)\s*\{\s*([^,]+)\s*,(.*?)\n\}", re.S)
 URL_RE = re.compile(r"^https?://", re.I)

@@ -27,6 +27,7 @@ git pull --ff-only origin main
 ## Source Of Truth
 
 - Academic and policy publications live in `live/bib/publications.bib` and `live/bib/policy_publications.bib`, respectively.
+- Both CV publication sections read those files directly; do not type citations into `main.tex`.
 - `live/build_publications_json.py` converts those BibTeX files into `live/site/publications.json` for the website.
 - The CV source lives in `live/cv/main.tex` and `live/cv/resume.cls`.
 - The website source lives in `live/site/*.qmd`, `live/site/styles.css`, and `live/site/_quarto.yml`.
@@ -38,16 +39,21 @@ git pull --ff-only origin main
 From the repository root:
 
 ```bash
-python3 build_publications_json.py
-cd cv
-latexmk -pdf -interaction=nonstopmode main.tex
-cd site
+python3 live/sync_publications.py --build
+cd live/site
 quarto render
-cd ..
+cd ../..
 git status
 ```
 
 Then review the changes, commit, and push to `main`.
+
+The sync command needs `pdflatex`, `biber`, and `pdftoppm`. It builds the CV,
+website PDF, mobile page previews, publication JSON, and a build fingerprint.
+Quarto checks that fingerprint before each render and regenerates JSON directly
+from the bibliography. A changed bibliography, CV source, or PDF blocks rendering
+until the sync command is run again. Commit `live/cv/publication-build.json`
+alongside the rebuilt outputs. No GitHub Actions workflow permissions are needed.
 
 ## Publication Status Rules
 

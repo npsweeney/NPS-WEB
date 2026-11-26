@@ -100,6 +100,25 @@
     "category": "Academic"
   },
   {
+    "id": "ortega2026nonri",
+    "type": "report",
+    "title": "How Do Non-R&I Factors Influence Innovation?",
+    "authors": [
+      "Ortega-Argilés, Raquel",
+      "Sweeney, Nicholas",
+      "Yuan, Pei-Yu"
+    ],
+    "venue": "Innovation and Research Caucus",
+    "year": "2026",
+    "date": "2026-11-13",
+    "doi": "https://ircaucus.ac.uk/publications/how-do-non-ri-factors-influence-innovation/",
+    "outlet_url": "https://ircaucus.ac.uk/",
+    "note": "",
+    "keywords": [],
+    "webnote": "Published",
+    "category": "Policy"
+  },
+  {
     "id": "ioramashvili2026ticket",
     "type": "report",
     "title": "Ticket to Impact: Estimating the impact of transport connectivity on collaborative research projects",

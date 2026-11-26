@@ -1,5 +1,7 @@
 project:
   type: website
+  pre-render:
+  - python3 ../sync_publications.py
   resources:
   - assets/
   - p7/

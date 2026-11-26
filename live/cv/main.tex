@@ -88,6 +88,17 @@
   \printlabeldateextra
 }
 
+\DeclareBibliographyDriver{report}{%
+  \printnames{author}%
+  \space (\printfield{year})\space
+  \printtext{\mkbibemph{\printfield[titlecase]{title}}}%
+  \addperiod\space
+  \printlist{location}\addcolon\space
+  \printlist{publisher}\addperiod\space
+  \iffieldundef{doi}{}{\href{\thefield{doi}}{\nolinkurl{Report}}\addperiod}%
+  \finentry
+}
+
 \addbibresource{../bib/publications.bib}
 
 % --- Name format: Surname, N.
@@ -129,7 +140,10 @@ Three-year appointment at the Alliance Manchester Business School, University of
 
 
 \begin{rSection}{Policy publications}
-Ioramashvili, C. \& Sweeney, N. (2026) \textit{Ticket to Impact: Estimating the impact of transport connectivity on collaborative research projects}. Oxford, UK: Innovation and Research Caucus. \href{https://ircaucus.ac.uk/publications/ticket-to-impact-estimating-the-impact-of-public-transport-infrastructure-for-research-productivity/}{\nolinkurl{Report}}.
+\begin{refsection}[../bib/policy_publications.bib]
+\nocite{*}
+\printbibliography[heading=none]
+\end{refsection}
 \end{rSection}
 
 
@@ -194,7 +208,7 @@ Department of Land Economy \hfill \textit{Cambridge, UK}
 \begin{rSection}{OTHER ACADEMIC ACTIVITIES}
 -- \textbf{Dissemination invitations} (theme, date; earliest first): University of Cambridge (innovation geography, Dec 2025); The Productivity Institute (innovation geography, Jan 2026); London School of Economics (innovation geography, Feb 2026); Ministry of Housing, Communities and Local Government (devolution, Feb 2026); HM Treasury (devolution, Mar 2026); RSAI-BIS Conference Belfast (big data mobility, invited early career researcher, May 2026)
 
--- \textbf{Journal referee}: Regional Studies
+-- \textbf{Journal referee}: Regional Studies; Research Policy
 
 -- \textbf{Advisory positions}: Scientific Advisory Board member for the Biologics Regional Innovation and Technology Ecosystem (\href{https://briteprogramme.co.uk/}{BRITE}) UKRI project 
 
