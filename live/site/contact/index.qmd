@@ -6,7 +6,7 @@ format:
 
 ---
 
-::: {.columns}
+::: {.columns .contact-columns}
 
 ::: {.column .contact-emails width="50%"}
 

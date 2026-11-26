@@ -101,6 +101,7 @@ format:
     const search = document.createElement("input");
     search.className = "pubs-search";
     search.type = "search";
+    search.setAttribute("aria-label", "Search publications");
     search.placeholder = "Search title, authors, type, outlet or keywords…";
     search.autocomplete = "off";
     search.spellcheck = false;
@@ -210,7 +211,7 @@ format:
       if (!pubsView.length) {
         const tr = document.createElement("tr");
         const td = document.createElement("td");
-        td.colSpan = 7;
+        td.colSpan = 6;
         td.className = "pubs-empty";
         td.textContent = "No matches.";
         tr.appendChild(td);
@@ -451,4 +452,40 @@ format:
   word-break: normal;
 }
 
+@media (max-width: 767px) {
+  .pubs-topbar { flex-wrap: wrap; gap: .5rem; }
+  .pubs-search { width: 100%; min-width: 0; font-size: 1rem; }
+  .pubs-table-wrap { overflow: visible; }
+  .pubs-table, .pubs-table tbody { display: block; }
+  .pubs-table thead { display: none; }
+  .pubs-table tbody tr {
+    display: block;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .pubs-table td:nth-child(n) {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    gap: .75rem;
+    width: 100%;
+    padding: .3rem 0;
+    border: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+    font-size: .9rem;
+  }
+  .pubs-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--muted);
+    overflow-wrap: normal;
+  }
+  .pubs-table td.pubs-title:nth-child(n) { display: block; margin-bottom: .5rem; }
+  .pubs-table td.pubs-category::before { content: "Type"; }
+  .pubs-table .pubs-title::before, .pubs-table .pubs-empty::before { display: none; }
+  .pubs-title-text { font-size: 1rem; line-height: 1.5; }
+  .pubs-chips { min-width: 0; }
+  .pubs-chip { overflow-wrap: anywhere; }
+}
 </style>
